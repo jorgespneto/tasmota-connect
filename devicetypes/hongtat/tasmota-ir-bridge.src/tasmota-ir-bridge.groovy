@@ -108,7 +108,7 @@ def parse(String description) {
     return events
 }
 
-def calledBackHandler(physicalgraph.device.HubResponse hubResponse) {
+def calledBackHandler(hubitat.device.HubResponse hubResponse) {
     def events = null
     def status = hubResponse.status
     def json = hubResponse.json
@@ -207,4 +207,6 @@ def ping() {
 def poll() {
     refresh()
 }
+
+
 
