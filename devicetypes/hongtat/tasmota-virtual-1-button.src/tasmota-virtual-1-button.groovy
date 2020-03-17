@@ -15,6 +15,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Original device driver modified to wotk with Hubitat - PabloGux 
+ *
  */
 private getButtonLabels() {[
     "button_1",
@@ -23,7 +26,7 @@ private getButtonLabels() {[
 import groovy.json.JsonOutput
 metadata {
     definition (name: "Tasmota Virtual 1 Button", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "x.com.st.d.remotecontroller") {
-        capability "Button"
+        capability "PushableButton"
         capability "Sensor"
         capability "Health Check"
         capability "Configuration"
@@ -118,4 +121,5 @@ def parseEvents(status, json) {
 private getSupportedButtonValues() {[
     "pushed"
 ]}
+
 
