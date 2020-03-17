@@ -21,7 +21,8 @@ metadata {
     definition(name: "Tasmota Fan Light", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "oic.d.fan") {
         capability "Switch Level"
         capability "Switch"
-        capability "Fan Speed"
+        capability "SwitchLevel"
+		capability "FanControl"
         capability "Health Check"
         capability "Actuator"
         capability "Refresh"
@@ -124,7 +125,7 @@ def parse(String description) {
     return events
 }
 
-def calledBackHandler(physicalgraph.device.HubResponse hubResponse) {
+def calledBackHandler(hubitat.device.HubResponse hubResponse) {
     def events = null
     def status = hubResponse.status
     def json = hubResponse.json
@@ -306,5 +307,8 @@ def childOn(dni) {
 def childOff(dni) {
     parent.callTasmota(this, "POWER1 0")
 }
+
+
+
 
 
