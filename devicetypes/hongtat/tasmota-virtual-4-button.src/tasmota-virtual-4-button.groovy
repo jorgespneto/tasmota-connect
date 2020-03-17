@@ -23,7 +23,8 @@ private getButtonLabels() {[
 import groovy.json.JsonOutput
 metadata {
     definition (name: "Tasmota Virtual 4 Button", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "x.com.st.d.remotecontroller", mcdSync: true, vid: "generic-4-button") {
-        capability "Button"
+	capability "PushableButton"
+
         capability "Sensor"
         capability "Health Check"
         capability "Configuration"
