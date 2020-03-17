@@ -12,41 +12,13 @@ Tasmota (Connect) is a SmartApp & Device Type for Hubitat Elevation, that allows
 
 ## Installation
 
-#### GitHub Install
-1. If you haven’t enabled GitHub integration, please visit here for [instructions](https://docs.smartthings.com/en/latest/tools-and-ide/github-integration.html).
-2. Sign in to SmartThings IDE: https://account.smartthings.com/login
-3. Under `My SmartApps` > click `Settings` > `Add new repository` > enter the following:
-   * Owner: **hongtat**
-   * Name: **tasmota-connect**
-   * Branch: **Master**
-4. Under `Update from Repo` > click `tasmota-connect` > Select all files > Tick `Publish` > then `Execute Update`
-5. Under `My Device Handlers` > click `Settings` > `Add new repository` > enter the following:
-   * Owner: **hongtat**
-   * Name: **tasmota-connect**
-   * Branch: **Master**
-6. Under `Update from Repo` > click `tasmota-connect` > Select all files > Tick `Publish` > then `Execute Update`
-7. Open your SmartThings mobile app
-8. Add Tasmota (Connect) SmartApp
-   * (New) Go to: `SmartApps` > `+` > `My SmartApps` > `Tasmota (Connect)`
-   * (Classic) Go to: `Automation` > `SmartApps` > `Add a SmartApp` > `My Apps` > `Tasmota (Connect)`
 
 #### Manual Installation
 For Tasmota (Connect) to function correctly, please make sure you install the SmartApp and all Device Handlers.
 
-1. Sign in to SmartThings IDE: https://account.smartthings.com/login
-2. SmartApp Installation
-   1. Under `My SmartApps` > choose `New SmartApp` > `From Code`
-   2. Paste the SmartApp code [[link](https://github.com/hongtat/tasmota-connect/blob/master/smartapps/hongtat/tasmota-connect.src/tasmota-connect.groovy)] into the text box
-   3. Click "***Save***" and "***Publish***" it to yourself.
-3. Device Handler Installation
-   1. Click on this [[link](https://github.com/hongtat/tasmota-connect/tree/master/devicetypes/hongtat)] to obtain the device handlers. For each of the device handlers, do the following:
-   2. Under `My Device Handlers` > choose `Create New Device Handler` > `From Code`
-   3. Paste the device code into the text box
-   4. Click "***Save***" and "***Publish***" it to yourself.
-4. For SmartApp and Device Handler updates, perform the same steps in manual installation.   
-
 ## Adding your Tasmota devices
-1. Under `SmartApps`, select `Tasmota (Connect)`
+1. Under `Apps`, select ADD USER APP
+2. Select `Tasmota (Connect)`
 2. Tap `New Tasmota Device`, and select the Tasmota device you want to add
 3. Fill in the `IP address`, `username` (optional), `password` (optional) of the Tasmota device
 
