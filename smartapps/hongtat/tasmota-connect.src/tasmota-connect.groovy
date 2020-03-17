@@ -28,7 +28,7 @@ definition(
     name: "Tasmota (Connect)",
     namespace: "hongtat",
     author: "AwfullySmart",
-    description: "Allows you to integrate your Tasmota devices with SmartThings.",
+    description: "Allows you to integrate your Tasmota devices with Hubitat Elevation.",
     iconUrl: "https://awfullysmart.github.io/st/awfullysmart-180.png",
     iconX2Url: "https://awfullysmart.github.io/st/awfullysmart-180.png",
     iconX3Url: "https://awfullysmart.github.io/st/awfullysmart-180.png",
