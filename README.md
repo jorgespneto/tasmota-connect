@@ -1,14 +1,13 @@
 ## Tasmota (Connect)
-Tasmota (Connect) is a SmartApp & Device Type for [Samsung SmartThings](https://www.smartthings.com/), that allows you to add your [Tasmota](https://github.com/arendst/Tasmota) devices as SmartThings devices.
+Tasmota (Connect) is a SmartApp & Device Type for Hubitat Elevation, that allows you to add your Pure Tasmota [Tasmota](https://github.com/arendst/Tasmota) devices as Hubitat devices.
 
 ## Features
-* Full support for [SmartThings (new) App](https://play.google.com/store/apps/details?id=com.samsung.android.oneconnect) & [SmartThings (Classic) App](https://play.google.com/store/apps/details?id=com.smartthings.android) 
 * Real-time device status
-* Pure Tasmota & SmartThings integration (No need for additional MQTT bridge)
+* Pure Tasmota & HE integration (No need for additional MQTT bridge)
 * Virtual Device (for RF / IR devices that can be controlled by a RF / IR bridge) 
 
 ## Requirement
-* Samsung SmartThings Hub
+* Hubitat Elevation Hub
 * Tasmota >=8.10 (recommended)
 
 ## Installation
