@@ -15,6 +15,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Original device driver modified to work with Hubitat - PabloGux 
+ *
  */
 
 metadata {
@@ -122,7 +125,7 @@ def parse(String description) {
     return events
 }
 
-def calledBackHandler(physicalgraph.device.HubResponse hubResponse) {
+def calledBackHandler(hubitat.device.HubResponse hubResponse) {
     def events = null
     def status = hubResponse.status
     def json = hubResponse.json
