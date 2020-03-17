@@ -15,6 +15,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Modified by PabloGux to work under HE
+ *
  */
 String appVersion() { return "1.0.2" }
 
@@ -71,7 +74,7 @@ def mainPage() {
                         defaultValue: "Every 5 minutes",
                         required: false, submitOnChange: false)
             }
-            remove("Remove (Includes Devices)", "This will remove all devices.")
+            //remove("Remove (Includes Devices)", "This will remove all devices.")
         }
     } else {
         dynamicPage(name: "mainPage", title: "Tasmota (Connect)") {
@@ -247,7 +250,7 @@ def addDevice(){
                 title: "Which device do you want to add?",
                 description: "", multiple: false, required: true, options: deviceOptions, submitOnChange: false
             )
-            input ("deviceName", title: "Device Name", defaultValue: "Tasmota device", required: true, submitOnChange: false)
+            input ("deviceName", "text", title: "Device Name", defaultValue: "Tasmota device", required: true, submitOnChange: false)
         }
     }
 }
@@ -376,7 +379,7 @@ def callTasmota(childDevice, command) {
     // Real device sends its object
     if (childSetting(childDevice.device.id, "ip")) {
         updateDeviceNetworkId(childDevice)
-        def hubAction = new physicalgraph.device.HubAction(
+        def hubAction = new hubitat.device.HubAction(
             method: "POST",
             headers: [HOST: childSetting(childDevice.device.id, "ip") + ":80"],
             path: "/cm?user=" + (childSetting(childDevice.device.id, "username") ?: "") + "&password=" + (childSetting(childDevice.device.id, "password") ?: "") + "&cmnd=" + command.replace('%','%25').replace(' ', '%20').replace("#","%23").replace(';', '%3B'),
