@@ -71,7 +71,7 @@ def mainPage() {
                         defaultValue: "Every 5 minutes",
                         required: false, submitOnChange: false)
             }
-            remove("Remove (Includes Devices)", "This will remove all devices.")
+            //remove("Remove (Includes Devices)", "This will remove all devices.")
         }
     } else {
         dynamicPage(name: "mainPage", title: "Tasmota (Connect)") {
