@@ -247,7 +247,8 @@ def addDevice(){
                 title: "Which device do you want to add?",
                 description: "", multiple: false, required: true, options: deviceOptions, submitOnChange: false
             )
-            input ("deviceName", title: "Device Name", defaultValue: "Tasmota device", required: true, submitOnChange: false)
+            input ("deviceName", "text", title: "Device Name", defaultValue: "Tasmota device", required: true, submitOnChange: false)
+
         }
     }
 }
