@@ -96,6 +96,7 @@ def initialize() {
     parent.callTasmota(this, "Status 5")
     parent.callTasmota(this, "Backlog Rule1 ON Power#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER\":\"%value%\"}} ENDON ON Power1#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER1\":\"%value%\"}} ENDON ON Power2#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER2\":\"%value%\"}} ENDON ON Power3#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER3\":\"%value%\"}} ENDON ON Power4#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER4\":\"%value%\"}} ENDON;Rule1 1")
     parent.callTasmota(this, "Backlog Rule2 ON Power5#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER5\":\"%value%\"}} ENDON ON Power6#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER6\":\"%value%\"}} ENDON;Rule2 1")
+    parent.callTasmota(this, "Status 8")
     refresh()
 }
 
@@ -146,6 +147,30 @@ def parseEvents(status, json) {
                     }
                     log.debug "Switch $number: '$powerStatus'"
                 }
+            }
+        }
+
+        // Temperature, Humidity (Status 8)
+        def resultTH = null
+        if (json?.StatusSNS != null) {
+            for (record in json.StatusSNS) {
+                if (record.value instanceof Map && (record.value.containsKey("Humidity") || record.value.containsKey("Temperature"))) {
+                    resultTH = record.value
+                }
+            }
+            if (resultTH != null) {
+                def childMessage = [:]
+                if (resultTH.containsKey("Humidity")) {
+                    childMessage.humidity = Math.round((resultTH.Humidity as Double) * 100) / 100
+                }
+                if (resultTH.containsKey("Temperature")) {
+                    childMessage.temperature = resultTH.Temperature.toFloat()
+                }
+                if (json?.StatusSNS?.TempUnit != null) {
+                    childMessage.tempUnit = json?.StatusSNS?.TempUnit
+                }
+                def child = childDevices.find { it.typeName == "Tasmota Child Temp/Humidity Sensor" }
+                child?.parseEvents(200, childMessage)
             }
         }
 
@@ -216,7 +241,20 @@ def refresh(dni=null) {
     if (state.dni == null || state.dni == "" || actualDeviceNetworkId != state.dni) {
         parent.callTasmota(this, "Status 5")
     }
+    parent.callTasmota(this, "Status 8")
     parent.callTasmota(this, "Status 11")
+}
+
+def ping() {
+    refresh()
+}
+
+def childOn(dni) {
+    parent.callTasmota(this, "POWER" + parent.channelNumber(dni) + " 1")
+}
+
+def childOff(dni) {
+    parent.callTasmota(this, "POWER" + parent.channelNumber(dni) + " 0")
 }
 
 def ping() {
