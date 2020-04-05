@@ -15,6 +15,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 04/05/2020 - Modified by PabloGux to run with Hubitat Elevation
+ *
  */
 String appVersion() { return "1.0.4" }
 
@@ -248,7 +251,6 @@ def addDevice(){
                 description: "", multiple: false, required: true, options: deviceOptions, submitOnChange: false
             )
             input ("deviceName", "text", title: "Device Name", defaultValue: "Tasmota device", required: true, submitOnChange: false)
-
         }
     }
 }
@@ -373,20 +375,26 @@ def initialize() {
  */
 def callTasmota(childDevice, command) {
     // Virtual device sends bridge's ID, find the actual device's object
+    log.debug ("callTasmota() parameter" + childDevice + "," + command )
     if (childDevice instanceof String) {
+        log.debug ("era un instance de string, asi que lo convierto") 
         childDevice = getChildDevices().find { it.id == childDevice }?: null
     }
+
     // Real device sends its object
+    
     if (childSetting(childDevice.device.id, "ip")) {
+        log.debug (childDevice)
         updateDeviceNetworkId(childDevice)
        def hubAction = new hubitat.device.HubAction(
             method: "POST",
             headers: [HOST: childSetting(childDevice.device.id, "ip") + ":80"],
-            path: "/cm?user=" + (childSetting(childDevice.device.id, "username") ?: "") + "&password=" + (childSetting(childDevice.device.id, "password") ?: "") + "&cmnd=" + command.replace('%','%25').replace(' ', '%20').replace("#","%23").replace(';', '%3B'),
+            path: "/cm?user=" + (childSetting(childDevice.device.id, "username") ?: "") + "&password=" + (childSetting(childDevice.device.id, "password") ?: "") + "&cmnd=" + command.replace('%','%25').replace(' ', '%20').replace("#","%23").replace(';', '%3B').replace("{", "%7B").replace("}", "%7D").replace('"',"%22"),
             null,
             [callback: "calledBackHandler"]
         )
         log.debug "${childDevice.device.displayName} (" + childSetting(childDevice.device.id, "ip") + ") called: " + command
+        log.debug (hubAction)
         childDevice.sendHubCommand(hubAction)
     } else {
         log.debug "Please add the IP address of ${childDevice.device.displayName}."
@@ -402,11 +410,13 @@ def callTasmota(childDevice, command) {
 def getJson(str) {
     def parts = []
     def json = null
+    
     if (str) {
         str.eachLine { line, lineNumber ->
             if (lineNumber == 0) {
                 parts = line.split(" ")
-                return
+                log.debug ("getJson(): parts=" + parts)  
+       
             }
         }
         if ((parts.length == 3) && parts[1].startsWith('/?json=')) {
@@ -580,3 +590,4 @@ def settingUpdate(name, value, type=null) {
 private getHub() {
     return location.getHubs().find{ it.getType().toString() == 'PHYSICAL' }
 }
+
