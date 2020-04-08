@@ -107,16 +107,17 @@ def initialize() {
     def pwr="/?json={\"StatusSTS\":{\"POWER\":\"%value%\"}}"
     def pwr1= "/?json={\"StatusSTS\":{\"POWER1\":\"%value%\"}}"
     def pwr2= "/?json={\"StatusSTS\":{\"POWER2\":\"%value%\"}}"
+    def pwr3= "/?json={\"StatusSTS\":{\"POWER3\":\"%value%\"}}"
     
     pwr=encode(pwr)
     pwr1=encode(pwr1)
     pwr2=encode(pwr2)
-    log.debug  ("initialize() pwr = " + pwr)
-    log.debug  ("initialize() pwr1 = " + pwr1)
+    pwr3=encode(pwr3)
+
     
     //parent.callTasmota(this, "Backlog Rule1 ON Power#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER\":\"%value%\"}} ENDON ON Power1#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER1\":\"%value%\"}} ENDON ON Power2#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER2\":\"%value%\"}} ENDON ON Power3#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER3\":\"%value%\"}} ENDON ON Power4#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER4\":\"%value%\"}} ENDON;Rule1 1")
     //parent.callTasmota(this, "Backlog Rule2 ON Power5#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER5\":\"%value%\"}} ENDON ON Power6#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER6\":\"%value%\"}} ENDON;Rule2 1")
-    parent.callTasmota(this, "Backlog Rule1 ON Power#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr + " ENDON ON Power1#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr1 +" ENDON ON Power2#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr2 +" ENDON; Rule1 1")                                                                                                                                                                 
+    parent.callTasmota(this, "Backlog Rule1 ON Power#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr + " ENDON ON Power1#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr1 +" ENDON ON Power2#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr2 +" ENDON ON Power3#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr3 +" ENDON; Rule1 1")                                                                                                                                                                 
     //parent.callTasmota(this, "Backlog Rule2 ON Power5#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER5\":\"%value%\"}} ENDON ON Power6#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER6\":\"%value%\"}} ENDON;Rule2 1")
     parent.callTasmota(this, "Status 8")
     log.debug  ("initialize() exit")    
@@ -126,19 +127,13 @@ def initialize() {
 
 def encode(String message) {  
     def s  = message
-    log.debug ("1 *********************************************************************")
-    log.debug ("2 encode() message=" + s)
     s = s.replace('?','X1').replace('=','X2').replace('{','X3').replace(':','X6').replace('\\',"").replace('"','X5').replace('}','X7')
-    log.debug ("3 encode() message=" + s)
     return s
  } 
 
 def decode(String message) {   
     def s  = message
-    log.debug ("1 *********************************************************************")
-    log.debug ("2 decode() message=" + s)
     s = s.replace('X1','?').replace('X2','=').replace('X3','{').replace('X6',':').replace('X4',"\\").replace('X5','"').replace('X7','}')
-    log.debug ("3 decode() message=" + s)
     return s
  }
  
