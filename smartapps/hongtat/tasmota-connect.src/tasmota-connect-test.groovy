@@ -312,7 +312,7 @@ def addDeviceConfirm() {
             dynamicPage(name: "addDeviceConfirm", title: "Have you added all the device handlers?", nextPage: "mainPage") {
                 section {
                     paragraph "Please follow these steps:", required: true
-                    paragraph "1. Sign in to your SmartThings IDE.", required: true
+                    paragraph "1. Sign in to your HE  IDE.", required: true
                     paragraph "2. Under 'My Device Handlers' > click 'Settings' > 'Add new repository' > enter the following", required: true
                     paragraph "   Owner: hongtat, Name: tasmota-connect, Branch: Master", required: true
                     paragraph "3. Under 'Update from Repo' > click 'tasmota-connect' > Select all files > Tick 'Publish' > then 'Execute Update'", required: true
@@ -377,7 +377,6 @@ def callTasmota(childDevice, command) {
     // Virtual device sends bridge's ID, find the actual device's object
     log.debug ("callTasmota() parameter" + childDevice + "," + command )
     if (childDevice instanceof String) {
-        log.debug ("era un instance de string, asi que lo convierto") 
         childDevice = getChildDevices().find { it.id == childDevice }?: null
     }
 
