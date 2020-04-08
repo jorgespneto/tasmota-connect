@@ -22,7 +22,7 @@
  */
 
 metadata {
-    definition(name: "Tasmota Generic Switch", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "oic.d.switch") {
+    definition(name: "Tasmota Generic Switch Test", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "oic.d.switch") {
         capability "Actuator"
         capability "Health Check"
         capability "Switch"
@@ -141,7 +141,7 @@ def parse(String description) {
     log.debug ("parse(): message.header =" + message.header) 
     def s =  message.header
     log.debug ("escaped message=" + s)
-    s = s.decode(2)
+    s = decode(s)
     log.debug ("parse(): clean message =" + s)
     
    
