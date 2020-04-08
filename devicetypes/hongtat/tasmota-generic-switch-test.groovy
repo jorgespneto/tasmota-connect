@@ -124,20 +124,22 @@ def initialize() {
 }
 
 
-def encode(String message) {   
+def encode(String message) {  
+    def s  = message
     log.debug ("1 *********************************************************************")
-    log.debug ("2 encode() message=" + message)
-    message.replace('?','X1').replace('=','X2').replace('{','X3').replace(':','X6').replace('\\',"").replace('"','X5').replace('}','X7')
-    log.debug ("3 encode() message=" + message)
-    return message
+    log.debug ("2 encode() message=" + s)
+    s.replace('?','X1').replace('=','X2').replace('{','X3').replace(':','X6').replace('\\',"").replace('"','X5').replace('}','X7')
+    log.debug ("3 encode() message=" + s)
+    return s
  }
 
 def decode(String message) {   
+    def s  = message
     log.debug ("1 *********************************************************************")
-    log.debug ("2 decode() message=" + message)
-    message.replace('X1','?').replace('X2','=').replace('X3','{').replace('X6',':').replace('X4',"\\").replace('X5','"').replace('X7','}')
-    log.debug ("3 decode() message=" + message)
-    return message
+    log.debug ("2 decode() message=" + s)
+    s.replace('X1','?').replace('X2','=').replace('X3','{').replace('X6',':').replace('X4',"\\").replace('X5','"').replace('X7','}')
+    log.debug ("3 decode() message=" + s)
+    return s
  }
  
 def parse(String description) { 
