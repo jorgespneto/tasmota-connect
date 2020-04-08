@@ -125,18 +125,18 @@ def initialize() {
 
 
 def encode(String message) {   
-    log.debug ("*********************************************************************")
-    log.debug ("encode() message=" + message)
+    log.debug ("1 *********************************************************************")
+    log.debug ("2 encode() message=" + message)
     message.replace('?','X1').replace('=','X2').replace('{','X3').replace(':','X6').replace('\\',"").replace('"','X5').replace('}','X7')
-    log.debug ("encode() message=" + message)
+    log.debug ("3 encode() message=" + message)
     return message
  }
 
 def decode(String message) {   
-    log.debug ("*********************************************************************")
-    log.debug ("encode() message=" + message)
+    log.debug ("1 *********************************************************************")
+    log.debug ("2 decode() message=" + message)
     message.replace('X1','?').replace('X2','=').replace('X3','{').replace('X6',':').replace('X4',"\\").replace('X5','"').replace('X7','}')
-    log.debug ("encode() message=" + message)
+    log.debug ("3 decode() message=" + message)
     return message
  }
  
