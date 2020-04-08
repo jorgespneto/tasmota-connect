@@ -131,7 +131,7 @@ def encode(String message) {
     s = s.replace('?','X1').replace('=','X2').replace('{','X3').replace(':','X6').replace('\\',"").replace('"','X5').replace('}','X7')
     log.debug ("3 encode() message=" + s)
     return s
- }
+ } 
 
 def decode(String message) {   
     def s  = message
