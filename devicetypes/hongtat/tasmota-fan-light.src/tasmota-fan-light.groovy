@@ -15,6 +15,11 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * 04/05/2020 - Modified by PabloGux to run with Hubitat Elevation 
+ * 04/20/2020 - Added new encode() and decode() methods 
+ *
  */
 
 metadata {
@@ -28,6 +33,7 @@ metadata {
         capability "Refresh"
         capability "Sensor"
         capability "Signal Strength"
+        capability "Initialize" 
 
         attribute "lastSeen", "string"
         attribute "version", "string"
@@ -110,15 +116,50 @@ def initialize() {
         "run$syncFrequency"(refresh)
     } catch (all) { }
 
+    def fan="/?json={\"StatusSTS\":{\"FanSpeed\":\"%value%\"}}"
+    def pwr= "/?json={\"StatusSTS\":{\"POWER1\":\"%value%\"}}"
+    fan=encode(fan)
+    pwr=encode(pwr)
+    
     parent.callTasmota(this, "Status 5")
-    parent.callTasmota(this, "Backlog Rule1 ON FanSpeed#data DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"FanSpeed\":\"%value%\"}} ENDON ON Power1#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] /?json={\"StatusSTS\":{\"POWER1\":\"%value%\"}} ENDON;Rule1 1")
+    parent.callTasmota(this, "Backlog Rule1 ON FanSpeed#data DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] "+ fan + " ENDON ON Power1#state DO WebSend ["+device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")+"] " + pwr + " ENDON;Rule1 1")
     refresh()
 }
 
+def encode(String message) {  
+    def s  = message
+    s = s.replace('?','X1').replace('=','X2').replace('{','X3').replace(':','X6').replace('\\',"").replace('"','X5').replace('}','X7')
+    return s
+ } 
+
+def decode(String message) {   
+    def s  = message
+    s = s.replace('X1','?').replace('X2','=').replace('X3','{').replace('X6',':').replace('X4',"\\").replace('X5','"').replace('X7','}')
+    return s
+ }
+
+
 def parse(String description) {
-    def events = null
+    /*def events = null
     def message = parseLanMessage(description)
     def json = parent.getJson(message.header)
+    if (json != null) {
+        events = parseEvents(200, json)
+    }
+    return events*/
+    
+    def events = null
+    def message = parseLanMessage(description)
+    
+    log.debug ("parse(): message=" + message)
+    log.debug ("parse(): message.header =" + message.header) 
+    def s =  message.header
+    
+    log.debug ("escaped message=" + s)
+    s = decode(s)
+    log.debug ("parse(): clean message =" + s)
+    
+    def json = parent.getJson(s)
     if (json != null) {
         events = parseEvents(200, json)
     }
@@ -307,8 +348,5 @@ def childOn(dni) {
 def childOff(dni) {
     parent.callTasmota(this, "POWER1 0")
 }
-
-
-
 
 
