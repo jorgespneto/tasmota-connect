@@ -16,7 +16,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * 04/05/2020 - Modified by PabloGux to run with Hubitat Elevation
+ *  
+ *  04/05/2020 - Modified by PabloGux to run with Hubitat Elevation 
+ *  04/29/2020 - Updated the paramenters in addChildDevice() as requiered by HE
  *
  */
 String appVersion() { return "1.0.4" }
@@ -28,7 +30,7 @@ definition(
     name: "Tasmota (Connect)",
     namespace: "hongtat",
     author: "AwfullySmart",
-    description: "Allows you to integrate your Tasmota devices with SmartThings.",
+    description: "Allows you to integrate your Tasmota devices with HE.",
     iconUrl: "https://awfullysmart.github.io/st/awfullysmart-180.png",
     iconX2Url: "https://awfullysmart.github.io/st/awfullysmart-180.png",
     iconX3Url: "https://awfullysmart.github.io/st/awfullysmart-180.png",
@@ -55,6 +57,9 @@ def mainPage() {
                     def typeName = it.typeName
                     if (moduleMap().find{ it.value.type == "${typeName}" }?.value?.settings?.contains('ip')) {
                         href "configureDevice", title:"$it.label", description: (childSetting(it.id, "ip") ?: "Tap to set IP address"), params: [did: it.deviceNetworkId]
+                        /****/
+                        
+                        /****/
                     } else {
                         href "configureDevice", title:"$it.label", description: "", params: [did: it.deviceNetworkId]
                     }
@@ -119,7 +124,9 @@ def configureDevice(params){
                         description: "Password",
                         defaultValue: "",
                         required: false, submitOnChange: true)
+               
             }
+
         }
         if (moduleParameter && moduleParameter.settings.contains('bridge')) {
             section("RF/IR Bridge") {
@@ -251,6 +258,23 @@ def addDevice(){
                 description: "", multiple: false, required: true, options: deviceOptions, submitOnChange: false
             )
             input ("deviceName", "text", title: "Device Name", defaultValue: "Tasmota device", required: true, submitOnChange: false)
+            
+            /***********************************************************************************/
+            /* INIT PGUX - Added to automatizally initialize the device after the IP was added */ 
+            /***********************************************************************************/
+            /* section ("Complete only for IP devices (leave empty for RF/Virtual devices)") 
+            {
+            input ("ip", "text", title: "IP Address", defaultValue: "", required: false, submitOnChange: false)
+            
+            input("username", "text", title: "Username", defaultValue: "", required: false, submitOnChange: false)
+                        
+            input("password", "text", title: "Password", defaultValue: "", required: false, submitOnChange: false)
+            )
+            
+            /***********************************************************************************/    
+            /* END PGUX */ 
+            /***********************************************************************************/
+
         }
     }
 }
@@ -260,7 +284,7 @@ def addDeviceConfirm() {
     if (virtualDeviceType) {
         def selectedDevice = moduleMap().find{ it.key == virtualDeviceType }.value
         try {
-            def virtualParent = addChildDevice("hongtat", selectedDevice?.type, "AWFULLYSMART-tasmota-${latestDni}", getHub()?.id, [
+            def virtualParent = addChildDevice("hongtat", selectedDevice?.type, "AWFULLYSMART-tasmota-${latestDni}", [
                     "completedSetup": true,
                     "label": deviceName
             ])
@@ -284,7 +308,7 @@ def addDeviceConfirm() {
                         for (i in 2..channel) {
                             parentChildName = (selectedDevice.child[i-2]) ?: parentChildName
                             String dni = "${virtualParent.deviceNetworkId}-ep${i}"
-                            def virtualParentChild = virtualParent.addChildDevice(parentChildName, dni, virtualParent.hub.id,
+                            def virtualParentChild = virtualParent.addChildDevice("hongtat", parentChildName, dni,
                                     [completedSetup: true, label: "${virtualParent.displayName} ${i}", isComponent: false])
                             log.debug "Created '${virtualParent.displayName}' - ${i}ch"
                         }
@@ -377,7 +401,6 @@ def callTasmota(childDevice, command) {
     // Virtual device sends bridge's ID, find the actual device's object
     log.debug ("callTasmota() parameter" + childDevice + "," + command )
     if (childDevice instanceof String) {
-        log.debug ("era un instance de string, asi que lo convierto") 
         childDevice = getChildDevices().find { it.id == childDevice }?: null
     }
 
