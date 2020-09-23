@@ -21,7 +21,7 @@
  */
 
 metadata {
-    definition(name: "Tasmota Generic Switch Test", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "oic.d.switch") {
+    definition(name: "Tasmota Generic Switch", namespace: "hongtat", author: "HongTat Tan", ocfDeviceType: "oic.d.switch") {
         capability "Actuator"
         capability "Health Check"
         capability "Switch"
